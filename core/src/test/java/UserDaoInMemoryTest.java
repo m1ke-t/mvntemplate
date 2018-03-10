@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 public class UserDaoInMemoryTest {
 
-    UserDao ud = new UserDaoInMemory();
+    UserDao ud = new UserDaoInMemory(Storage.getInstance());
 
     User user0 = new User("login0", "pwd", "username0");
     User user1 = new User("login1", "pwd", "username1");

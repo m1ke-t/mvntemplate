@@ -2,10 +2,12 @@ import java.util.Collection;
 import java.util.HashMap;
 
 
-//Реализовать логику добавления юзера без ID, назначать ID самостоятельно, инкрементируя
 public class Storage {
     public static class StorageHolder {
         public static final Storage storageInstance = new Storage();
+    }
+
+    private Storage() {
     }
 
     public static Storage getInstance() {
@@ -17,7 +19,7 @@ public class Storage {
     private int cnt = 0;
 
 
-    public  void save(User user) {
+    public User save(User user) {
         if (user.getId() == null) {
             if(findById(cnt) == null) {
                 user.setId(cnt);
@@ -30,6 +32,7 @@ public class Storage {
         } else {
             storage.put(user.getId(), user);
         }
+        return user;
     }
 
     public  User findById(Integer id) {

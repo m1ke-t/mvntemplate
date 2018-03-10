@@ -2,12 +2,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-/**
- * Created by Mike S. on 04.03.2018.
- */
+
+
 public class UserDaoInMemory implements UserDao {
     static final Logger log = LoggerFactory.getLogger(UserDaoInMemory.class.getName());
-    private Storage storage = Storage.getInstance();
+    private Storage storage;
 
     @Override
     public void createUser(User user) {
@@ -65,4 +64,7 @@ public class UserDaoInMemory implements UserDao {
         return new ArrayList<>(storage.getAll());
     }
 
+    public UserDaoInMemory(Storage storage) {
+        this.storage = storage;
+    }
 }
