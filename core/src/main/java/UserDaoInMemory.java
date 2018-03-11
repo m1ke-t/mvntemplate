@@ -11,18 +11,18 @@ public class UserDaoInMemory implements UserDao {
     @Override
     public void createUser(User user) {
         storage.save(user);
-        log.info("User " + user.getId() + " " + user.getLogin() + " " + user.getName() + " added");
+        log.info("User {} {} {} added", user.getId(), user.getLogin(), user.getName());
     }
 
     @Override
     public void updateUser(User user) {
-        log.info("Searching user with id " + user.getId() + "...");
+        log.info("Searching user with id {}...", user.getId());
         if (storage.findById(user.getId()) != null) {
-            log.info("User " + user.getId() + " " + user.getLogin() + " " + user.getName() + " was found, updating...");
+            log.info("User {} {} {} was found, updating...", user.getId(), user.getLogin(), user.getName());
             createUser(user);
-            log.info("User " + user.getId() + " " + user.getLogin() + " " + user.getName() + " updated!");
+            log.info("User {} {} {} updated!", user.getId(), user.getLogin(), user.getName());
         } else {
-            log.info("User with id " + user.getId() + " was not found!");
+            log.info("User with id {} was not found!", user.getId());
         }
     }
 
@@ -30,31 +30,31 @@ public class UserDaoInMemory implements UserDao {
     public void deleteUser(Integer id) {
 
         if (storage.deleteById(id)) {
-            log.info("User with login " + id + " removed");
+            log.info("User with login {} removed", id);
         } else {
-            log.info("User with login " + id + " was not found");
+            log.info("User with login {} was not found", id);
         }
     }
 
     @Override
     public void deleteUser(String login) {
         if (storage.deleteByLogin(login)) {
-            log.info("User with login " + login + " removed");
+            log.info("User with login {}  removed", login);
         } else {
-            log.info("User with login " + login + " was not found");
+            log.info("User with login {} was not found", login);
         }
     }
 
     @Override
     public User getById(Integer id) {
-        log.info("Trying to get user by id " + id);
+        log.info("Trying to get user by id {}", id);
         User user = storage.findById(id);
         if (user != null) {
-            log.info("User with id " + id + " was found");
-            log.info("User " + user.getId() + " " + user.getLogin() + " " + user.getName());
+            log.info("User with id {} was found");
+            log.info("User {} {} {}", user.getId(), user.getLogin(), user.getName());
             return user;
         } else {
-            log.info("User with id " + id + " was not found!");
+            log.info("User with id {} was not found!", id);
             return null;
         }
     }
