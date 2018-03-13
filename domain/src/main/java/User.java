@@ -14,7 +14,6 @@ public class User {
     }
 
     public String getLogin() {
-
         return login;
     }
 
@@ -45,7 +44,8 @@ public class User {
 
         if (!login.equals(user.login)) return false;
         if (!password.equals(user.password)) return false;
-        return name.equals(user.name);
+        if (!name.equals(user.name)) return false;
+        return !(id != null ? !id.equals(user.id) : user.id != null);
 
     }
 
@@ -54,6 +54,7 @@ public class User {
         int result = login.hashCode();
         result = 31 * result + password.hashCode();
         result = 31 * result + name.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
     }
 }
