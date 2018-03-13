@@ -1,6 +1,3 @@
-/**
- * Created by Mike S. on 04.03.2018.
- */
 public class User {
 
     private String login;
@@ -38,4 +35,26 @@ public class User {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!login.equals(user.login)) return false;
+        if (!password.equals(user.password)) return false;
+        return name.equals(user.name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = login.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
+    }
 }
+
