@@ -26,6 +26,8 @@ public class StorageTest {
         storage.save(user);
         dbUser = storage.findById(10);
         assertEquals(user, dbUser);
+        assertEquals(storage.save(user), null);
+
 
         assertEquals(size + 2, storage.getAll().size());
     }

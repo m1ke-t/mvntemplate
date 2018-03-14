@@ -1,4 +1,4 @@
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -10,17 +10,18 @@ import static org.junit.Assert.*;
 
 public class UserDaoInMemoryTest {
 
-    private static Storage mockedStorage;
-    static User user0 = new User("login0", "pwd", "username0");
-    static User user1 = new User("login1", "pwd", "username1");
-    static User user2 = new User("login2", "pwd", "username2");
-    static User user3 = new User("login3", "pwd", "username3");
+    User user0 = new User("login0", "pwd", "username0");
+    User user1 = new User("login1", "pwd", "username1");
+    User user2 = new User("login2", "pwd", "username2");
+    User user3 = new User("login3", "pwd", "username3");
+    UserDao ud;
 
     User dbUser;
 
-    @BeforeClass
-    public static void setUp(){
-        mockedStorage = mock(Storage.class);
+    @Before
+    public void setUp(){
+        Storage mockedStorage = mock(Storage.class);
+        ud = new UserDaoInMemory(mockedStorage);
 
 
         User dbUser0 = user0;
@@ -37,6 +38,7 @@ public class UserDaoInMemoryTest {
         when(mockedStorage.findById(1)).thenReturn(dbUser1);
         when(mockedStorage.findById(2)).thenReturn(dbUser2);
         when(mockedStorage.findById(3)).thenReturn(dbUser3);
+
 
         when(mockedStorage.save(user0)).thenReturn(dbUser0);
         when(mockedStorage.save(user1)).thenReturn(dbUser1);
@@ -56,7 +58,6 @@ public class UserDaoInMemoryTest {
         when(mockedStorage.getAll()).thenReturn(Arrays.asList(user0, user1, user2, user3));
     }
 
-    UserDao ud = new UserDaoInMemory(mockedStorage);
 
 
     @Test
@@ -93,4 +94,5 @@ public class UserDaoInMemoryTest {
         assertTrue(dbUser != null);
         assertEquals(dbUser, user3);
     }
+
 }
