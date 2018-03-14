@@ -20,6 +20,7 @@ public class Storage {
 
 
     public User save(User user) {
+        if (findIDByLogin(user.getLogin()) != null) return null;
         if (user.getId() == null) {
             if(findById(cnt) == null) {
                 user.setId(cnt);
