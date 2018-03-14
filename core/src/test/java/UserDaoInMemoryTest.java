@@ -1,19 +1,62 @@
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+
+import java.util.Arrays;
+
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 
 public class UserDaoInMemoryTest {
 
-    UserDao ud = new UserDaoInMemory(Storage.getInstance());
-
-    User user0 = new User("login0", "pwd", "username0");
-    User user1 = new User("login1", "pwd", "username1");
-    User user2 = new User("login2", "pwd", "username2");
-    User user3 = new User("login3", "pwd", "username3");
+    private static Storage mockedStorage;
+    static User user0 = new User("login0", "pwd", "username0");
+    static User user1 = new User("login1", "pwd", "username1");
+    static User user2 = new User("login2", "pwd", "username2");
+    static User user3 = new User("login3", "pwd", "username3");
 
     User dbUser;
-    int size;
 
+    @BeforeClass
+    public static void setUp(){
+        mockedStorage = mock(Storage.class);
+
+
+        User dbUser0 = user0;
+        user0.setId(0);
+        User dbUser1 = new User("login1", "pwd", "username1");
+        user0.setId(1);
+        User dbUser2 = new User("login2", "pwd", "username2");
+        user0.setId(2);
+        User dbUser3 = new User("login3", "pwd", "username3");
+        user0.setId(3);
+
+
+        when(mockedStorage.findById(0)).thenReturn(dbUser0);
+        when(mockedStorage.findById(1)).thenReturn(dbUser1);
+        when(mockedStorage.findById(2)).thenReturn(dbUser2);
+        when(mockedStorage.findById(3)).thenReturn(dbUser3);
+
+        when(mockedStorage.save(user0)).thenReturn(dbUser0);
+        when(mockedStorage.save(user1)).thenReturn(dbUser1);
+        when(mockedStorage.save(user2)).thenReturn(dbUser2);
+        when(mockedStorage.save(user3)).thenReturn(dbUser3);
+
+        when(mockedStorage.deleteById(0)).thenReturn(true);
+        when(mockedStorage.deleteById(1)).thenReturn(true);
+        when(mockedStorage.deleteById(2)).thenReturn(true);
+        when(mockedStorage.deleteById(3)).thenReturn(true);
+
+        when(mockedStorage.deleteByLogin("login0")).thenReturn(true);
+        when(mockedStorage.deleteByLogin("login1")).thenReturn(true);
+        when(mockedStorage.deleteByLogin("login2")).thenReturn(true);
+        when(mockedStorage.deleteByLogin("login3")).thenReturn(true);
+
+        when(mockedStorage.getAll()).thenReturn(Arrays.asList(user0, user1, user2, user3));
+    }
+
+    UserDao ud = new UserDaoInMemory(mockedStorage);
 
 
     @Test
@@ -33,57 +76,11 @@ public class UserDaoInMemoryTest {
         assertEquals(user2.getLogin(), dbUser.getLogin());
     }
 
-    @Test
-    public void testUpdate(){
-        size = ud.getAll().size();
-
-        ud.createUser(user0);
-        ud.createUser(user1);
-        ud.createUser(user2);
-        ud.createUser(user3);
-
-        User userUpd = new User("login3", "pwd", "username3");
-        userUpd.setId(3);
-
-
-        ud.updateUser(userUpd);
-        dbUser = ud.getById(3);
-        assertEquals(userUpd.getId(), dbUser.getId());
-        assertEquals(userUpd.getName(), dbUser.getName());
-        assertEquals(userUpd.getLogin(), dbUser.getLogin());
-
-        assertEquals(ud.getAll().size(), size + 4);
-
-    }
-
     @Test (expected = NullPointerException.class)
     public void testUpdateNull() {
         ud.updateUser(null);
     }
 
-
-
-
-    @Test
-    public void testDeleteUserByLogin() {
-       size = ud.getAll().size();
-        ud.createUser(user1);
-        ud.deleteUser("login1");
-        assertTrue(ud.getById(1) == null);
-        assertEquals(ud.getAll().size(), size);
-    }
-    @Test
-    public void testDeleteUserWrongLogin() {
-        size = ud.getAll().size();
-        ud.deleteUser("nonexistentLogin");
-        assertEquals(size, ud.getAll().size());
-    }
-    @Test
-    public void testDeleteUserWrongID() {
-        size = ud.getAll().size();
-        ud.deleteUser(4124);
-        assertEquals(size, ud.getAll().size());
-    }
 
     @Test
     public void testGetUserByWrongID() {
@@ -92,10 +89,8 @@ public class UserDaoInMemoryTest {
     }
     @Test
     public void testGetUserByID() {
-        for (int i = 0; i < 10; i++) {
-            ud.createUser(new User("login" + i, "pwd", "username" + i));
-        }
-        dbUser = ud.getById(9);
+        dbUser = ud.getById(3);
         assertTrue(dbUser != null);
+        assertEquals(dbUser, user3);
     }
 }
